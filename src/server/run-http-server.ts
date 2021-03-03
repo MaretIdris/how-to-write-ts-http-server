@@ -21,14 +21,11 @@ import { Content, Route } from "./types";
 import { IncomingMessage, ServerResponse } from "http";
 import { myRoutes } from "./routes/routes";
 import { noRouteFoundFunction } from "./routes/no-route-found";
-
 const url = require("url");
 
 const Port: number = 3000;
 
 let myHttpServerShutdownManager: GracefulShutdownManager;
-
-let counter = 0;
 
 function processHttpRequest(
   requestFromClient: IncomingMessage,
