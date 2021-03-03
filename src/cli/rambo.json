@@ -1,0 +1,41 @@
+{
+  "batchcomplete": "",
+  "continue": {
+    "gsroffset": 5,
+    "continue": "gsroffset||"
+  },
+  "query": {
+    "pages": {
+      "380769": {
+        "pageid": 380769,
+        "ns": 0,
+        "title": "Rambo (franchise)",
+        "index": 2
+      },
+      "6899162": {
+        "pageid": 6899162,
+        "ns": 0,
+        "title": "Rambo",
+        "index": 1
+      },
+      "18375927": {
+        "pageid": 18375927,
+        "ns": 0,
+        "title": "John Rambo",
+        "index": 3
+      },
+      "18850952": {
+        "pageid": 18850952,
+        "ns": 0,
+        "title": "Rambo (2008 film)",
+        "index": 4
+      },
+      "43829061": {
+        "pageid": 43829061,
+        "ns": 0,
+        "title": "Rambo: Last Blood",
+        "index": 5
+      }
+    }
+  }
+}
