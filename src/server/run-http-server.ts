@@ -23,51 +23,52 @@ import { myRoutes } from "./routes/routes";
 import { noRouteFoundFunction } from "./routes/no-route-found";
 const url = require("url");
 
-const Port: number = 3000;
+class RunHttpServer {
+  PORT: number = 3000;
+  myHttpServerShutdownManager: GracefulShutdownManager;
 
-let myHttpServerShutdownManager: GracefulShutdownManager;
+  main() {
+    // https://nodejs.org/api/process.html
+    process.on("SIGINT", () => {
+      console.log("Ctrl+C just got pressed! 💀");
+      this.shutdownNow();
+    });
+    this.createAndStartHttpServer(myRoutes);
+  }
 
-function processHttpRequest(
-  requestFromClient: IncomingMessage,
-  responseToClient: ServerResponse,
-  routes: Array<Route>
-): void {
-  const unparsedUrl = requestFromClient.url;
-  const parsedUrl = url.parse(unparsedUrl, true);
-  const pathname: string = parsedUrl.pathname;
-  const query: ParsedUrlQuery = parsedUrl.query;
+  shutdownNow(): void {
+    this.myHttpServerShutdownManager.terminate(() => console.log("HTTP Server: Goodbye!"));
+  }
 
-  const matchingRoute: Route = routes.find((route: Route) => route.pathname === pathname);
+  createAndStartHttpServer(routes: Array<Route>): void {
+    console.log(`Starting server on port ${this.PORT} 🚀. Press "Ctrl+C" to kill the server 💀.`);
+    const myHttpServer: http.Server = http.createServer((req, res) => {
+      this.processHttpRequest(req, res, routes);
+    });
+    this.myHttpServerShutdownManager = new GracefulShutdownManager(myHttpServer);
+    // The following call is sort of like calling a promise. It returns immediately
+    // and executes the next line. But the server is started on Port.
+    myHttpServer.listen(this.PORT);
+  }
 
-  const content: Content = !matchingRoute ? noRouteFoundFunction(query) : matchingRoute.func(query);
+  processHttpRequest(
+      requestFromClient: IncomingMessage,
+      responseToClient: ServerResponse,
+      routes: Array<Route>
+  ): void {
+    const unparsedUrl = requestFromClient.url;
+    const parsedUrl = url.parse(unparsedUrl, true);
+    const pathname: string = parsedUrl.pathname;
+    const query: ParsedUrlQuery = parsedUrl.query;
 
-  responseToClient.setHeader("Content-Type", content.type);
-  responseToClient.write(content.payload);
-  responseToClient.end();
+    const matchingRoute: Route = routes.find((route: Route) => route.pathname === pathname);
+
+    const content: Content = !matchingRoute ? noRouteFoundFunction(query) : matchingRoute.func(query);
+
+    responseToClient.setHeader("Content-Type", content.type);
+    responseToClient.write(content.payload);
+    responseToClient.end();
+  }
 }
 
-function createAndStartHttpServer(routes: Array<Route>): void {
-  console.log(`Starting server on port ${Port} 🚀. Press "Ctrl+C" to kill the server 💀.`);
-  const myHttpServer: http.Server = http.createServer((req, res) => {
-    processHttpRequest(req, res, routes);
-  });
-  myHttpServerShutdownManager = new GracefulShutdownManager(myHttpServer);
-  // The following call is sort of like calling a promise. It returns immediately
-  // and executes the next line. But the server is started on Port.
-  myHttpServer.listen(Port);
-}
-
-function shutdownNow(): void {
-  myHttpServerShutdownManager.terminate(() => console.log("HTTP Server: Goodbye!"));
-}
-
-function main(): void {
-  // https://nodejs.org/api/process.html
-  process.on("SIGINT", () => {
-    console.log("Ctrl+C just got pressed! 💀");
-    shutdownNow();
-  });
-  createAndStartHttpServer(myRoutes);
-}
-
-main();
+new RunHttpServer().main();
