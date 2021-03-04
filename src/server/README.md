@@ -1,6 +1,8 @@
-# Architecture diagram of servers in Lucid Spark
+# Architecture diagram of servers
 
-https://lucid.app/lucidspark/67207bbd-8320-4909-8157-619cd6cb912e/edit?beaconFlowId=87124AEE05ACA6E4#
+- [HTTP Server (Lucidspark)](https://lucid.app/lucidspark/67207bbd-8320-4909-8157-619cd6cb912e/edit?beaconFlowId=87124AEE05ACA6E4#)
+- [How server and client side development works (Lucidspark)](https://lucid.app/lucidspark/b87d8b04-4940-4380-a28e-215d6047ddf1/edit?beaconFlowId=2E8495C8989B0C72#)
+- [Design doc for server.ts creation](https://docs.google.com/document/d/1ZveONguoZCjFhqXU_zSXtPYznf39u3FYULusoNFY5uA/edit#heading=h.kulayrk4h10h)
 
 # References for HTTP Server
 
