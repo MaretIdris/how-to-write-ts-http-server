@@ -23,8 +23,10 @@ import { myRoutes } from "./routes/routes";
 import { noRouteFoundFunction } from "./routes/no-route-found";
 const url = require("url");
 
+// https://dev.to/hte305/simple-deploy-typescript-application-to-heroku-5b6g
+const PORT : string|number = process.env.PORT || 3000;
+
 class RunHttpServer {
-  PORT: number = 3000;
   myHttpServerShutdownManager: GracefulShutdownManager;
 
   main() {
@@ -41,14 +43,14 @@ class RunHttpServer {
   }
 
   createAndStartHttpServer(routes: Array<Route>): void {
-    console.log(`Starting server on port ${this.PORT} 🚀. Press "Ctrl+C" to kill the server 💀.`);
+    console.log(`Starting server on port ${PORT} 🚀. Press "Ctrl+C" to kill the server 💀.`);
     const myHttpServer: http.Server = http.createServer((req, res) => {
       this.processHttpRequest(req, res, routes);
     });
     this.myHttpServerShutdownManager = new GracefulShutdownManager(myHttpServer);
     // The following call is sort of like calling a promise. It returns immediately
     // and executes the next line. But the server is started on Port.
-    myHttpServer.listen(this.PORT);
+    myHttpServer.listen(PORT);
   }
 
   processHttpRequest(
